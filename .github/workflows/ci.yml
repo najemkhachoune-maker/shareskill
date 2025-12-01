@@ -32,6 +32,6 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Build & Test (Maven)
-         run mvn -B -f backend/notification-service/pom.xml clean verify
+        run: mvn -B -f backend/notification-service/pom.xml clean verify
 
 
