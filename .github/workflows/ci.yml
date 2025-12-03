@@ -2,42 +2,73 @@ name: CI - Notification Service
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main, develop, feature/**, chore/** ]
+    paths:
+      - 'backend/notification-service/**'
+      - '.github/workflows/ci.yml'
   pull_request:
-    branches:
-      - main
-  workflow_dispatch:   # ➜ active le bouton "Run workflow"    
+    branches: [ main, develop ]
+    paths:
+      - 'backend/notification-service/**'
+      - '.github/workflows/ci.yml'
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    # 👉 Le profil test sera utilisé pour CI (Firebase désactivé)
+    env:
+      SPRING_PROFILES_ACTIVE: test
 
-      - name: Set up Java 17
-        uses: actions/setup-java@v3
+    defaults:
+      run:
+        working-directory: backend/notification-service
+
+    steps:
+      # --- 1) Checkout ---
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # --- 2) Java + Maven cache ---
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+          cache: maven
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('backend/notification-service/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      # --- 3) Permettre exécution mvnw ---
+      - name: Make Maven Wrapper executable
+        run: chmod +x mvnw
 
-      - name: Build & Test (Maven)
-        run: mvn -B -f backend/notification-service/pom.xml clean verify
-      - name: Upload surefire reports
-        if: failure()
+      # --- 4a) Feature branch = UNIT TESTS ONLY ---
+      - name: Run Unit Tests (feature/*)
+        if: startsWith(github.ref, 'refs/heads/feature/')
+        run: ./mvnw -B -ntp test -Dtest=*Test
+
+      # --- 4b) Develop / Main / PR = FULL SUITE (Unit + Integration) ---
+      - name: Run Full Test Suite (develop/main/PR)
+        if: |
+          github.event_name == 'pull_request' ||
+          github.ref == 'refs/heads/develop' ||
+          github.ref == 'refs/heads/main'
+        run: ./mvnw -B -ntp verify
+
+      # --- 5) Upload test reports (toujours utile) ---
+      - name: Upload Surefire Reports (Unit Tests)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-         name: surefire-reports
-         path: backend/notification-service/target/surefire-reports
+          name: surefire-reports
+          path: backend/notification-service/target/surefire-reports/*
+
+      - name: Upload Failsafe Reports (Integration Tests)
+        if: always()
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: failsafe-reports
+          path: backend/notification-service/target/failsafe-reports/*
 
 
