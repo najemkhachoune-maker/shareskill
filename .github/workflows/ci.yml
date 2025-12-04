@@ -71,4 +71,19 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.organization=nadia-2004 \
             -Dsonar.projectKey=nadia-2004_Plateforme-Skillverse
+        # 6) Trivy — Scan FS (code + dépendances + Dockerfile + secrets)
+      - name: Trivy FS Scan (code & deps)
+        if: github.event_name == 'pull_request' ||
+            github.ref == 'refs/heads/develop' ||
+            github.ref == 'refs/heads/main' ||
+            github.event_name == 'workflow_dispatch'
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: fs
+          path: .
+          scanners: vuln,secret,config
+          format: table
+          exit-code: '1'                 # ❗ fail le job si CVE selon 'severity'
+          severity: 'MEDIUM,HIGH,CRITICAL'
+          ignore-unfixed: true           # optionnel mais recommandé
 
