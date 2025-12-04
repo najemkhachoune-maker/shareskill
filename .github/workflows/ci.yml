@@ -73,7 +73,8 @@ jobs:
             -Dsonar.projectKey=nadia-2004_Plateforme-Skillverse
         # 6) Trivy — Scan FS (code + dépendances + Dockerfile + secrets)
       - name: Trivy FS Scan (code & deps)
-        if: github.event_name == 'pull_request' ||
+        if: startsWith(github.ref, 'refs/heads/feature/')||
+            github.event_name == 'pull_request' ||
             github.ref == 'refs/heads/develop' ||
             github.ref == 'refs/heads/main' ||
             github.event_name == 'workflow_dispatch'
