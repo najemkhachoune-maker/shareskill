@@ -31,6 +31,8 @@ jobs:
       # 1) Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # 2) Java + cache Maven
       - name: Setup Java 17
