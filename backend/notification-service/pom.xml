@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-<<<<<<< HEAD
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -29,7 +28,6 @@
     <grpc.version>1.75.0</grpc.version>
     <commons-lang3.version>3.18.0</commons-lang3.version>
   </properties>
-=======
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -228,7 +226,6 @@
 
 		</plugins>
 	</build>
->>>>>>> 41d558f (chore: add JaCoCo coverage + update SonarCloud scan)
 
   <!-- Forcer des versions saines, même si elles viennent en transitif via des starters -->
   <dependencyManagement>
