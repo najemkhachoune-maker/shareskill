@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class NotificationServiceApplication {
-
+    @SuppressWarnings("java:S1874")
 	public static void main(String[] args) {
 		SpringApplication.run(NotificationServiceApplication.class, args);
 	}
