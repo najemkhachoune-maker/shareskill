@@ -107,13 +107,12 @@ jobs:
          exit-code: '1'
          severity: 'MEDIUM,HIGH,CRITICAL'
          ignore-unfixed: true
- 
-    # 8) Build JAR 
+       # 7) Build JAR
       - name: Build JAR
-    run: ./mvnw -B -ntp clean package
+        run: ./mvnw -B -ntp clean package
 
-  # 9) Build Docker Image
-- name: Build Docker Image
-    run: docker build -t notification-service:0.0.1 .
+      # 8) Build Docker Image
+      - name: Build Docker Image
+        run: docker build -t notification-service:0.0.1 . 
 
 
