@@ -1,6 +1,9 @@
 # Étape 1 : image Java
 FROM eclipse-temurin:17-jdk-alpine
 
+# Mise à jour des packages Alpine pour corriger vulnérabilités BusyBox/libpng
+RUN apk update && apk upgrade && rm -rf /var/cache/apk/*
+
 # Étape 2 : dossier de travail
 WORKDIR /app
 
