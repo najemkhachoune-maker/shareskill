@@ -1,0 +1,31 @@
+services:
+  reputation-db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: reputation_db
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - reputation-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d reputation_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  reputation-service:
+    build: .
+    depends_on:
+      reputation-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://reputation-db:5432/reputation_db
+      SPRING_DATASOURCE_USERNAME: dev
+      SPRING_DATASOURCE_PASSWORD: dev
+    ports:
+      - "8080:8080"
+
+volumes:
+  reputation-data:
