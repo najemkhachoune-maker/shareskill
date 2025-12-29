@@ -1,0 +1,84 @@
+package com.booking;
+
+import com.booking.domain.Booking;
+import com.booking.service.BookingService;
+import com.booking.service.BookingService.AvailabilityResponse;
+import com.booking.service.BookingService.CreateBookingRequest;
+import com.booking.service.BookingService.CreateBookingResponse;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.OffsetDateTime;
+
+@RestController
+@RequestMapping("/api")
+public class BookingController {
+
+    private final BookingService bookingService;
+
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
+
+    public record CreateBookingBody(
+            @NotNull Long resourceId,
+            @NotBlank String customerName,
+            @NotNull OffsetDateTime startAt,
+            @NotNull OffsetDateTime endAt
+    ) {}
+
+    public record BookingResponse(
+            Long id,
+            Long resourceId,
+            String customerName,
+            OffsetDateTime startAt,
+            OffsetDateTime endAt,
+            Object status
+    ) {
+        public static BookingResponse from(Booking b) {
+            return new BookingResponse(
+                    b.getId(),
+                    b.getResourceId(),
+                    b.getCustomerName(),
+                    b.getStartAt(),
+                    b.getEndAt(),
+                    b.getStatus()
+            );
+        }
+    }
+
+    @PostMapping("/bookings")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CreateBookingResponse createBooking(@Valid @RequestBody CreateBookingBody body) {
+        return bookingService.createBooking(new CreateBookingRequest(
+                body.resourceId(), body.customerName(), body.startAt(), body.endAt()
+        ));
+    }
+
+    @GetMapping("/bookings/{id}")
+    public ResponseEntity<BookingResponse> getBooking(@PathVariable Long id) {
+        Booking booking = bookingService.getById(id);
+        return ResponseEntity.ok(BookingResponse.from(booking));
+    }
+
+    @GetMapping("/resources/{resourceId}/availability")
+    public AvailabilityResponse availability(
+            @PathVariable Long resourceId,
+            @RequestParam OffsetDateTime from,
+            @RequestParam OffsetDateTime to
+    ) {
+        return bookingService.getAvailability(resourceId, from, to);
+    }
+
+    @PostMapping("/bookings/{bookingId}/cancel")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancel(@PathVariable Long bookingId) {
+        bookingService.cancelBooking(bookingId);
+    }
+}
