@@ -1,0 +1,49 @@
+global:
+  registry: docker.io/najemkub
+  imagePullSecretName: dockerhub-cred
+  imagePullPolicy: IfNotPresent
+
+namespace: prod
+
+services:
+  - name: profilservice
+    image: profilservice:v2
+    port: 8080
+    replicaCount: 2
+  - name: noutificationservices
+    image: noutificationservices:v2
+    port: 8080
+    replicaCount: 2
+  - name: authentification
+    image: authentification:v2
+    port: 8080
+    replicaCount: 2
+  - name: chat-app
+    image: chat-app:v2
+    port: 8080
+    replicaCount: 2
+  - name: matchingservices
+    image: matchingservices:v2
+    port: 8080
+    replicaCount: 2
+  - name: exchangeservice
+    image: exchangeservice:v2
+    port: 8080
+    replicaCount: 2
+
+apiGateway:
+  enabled: true
+  name: api-gateway
+  image: api-gateway:v2
+  port: 8080
+  replicaCount: 2
+  serviceType: LoadBalancer
+
+ingress:
+  enabled: true
+  className: nginx
+  hostname: api.example.com
+  tls:
+    enabled: true
+    secretName: api-tls
+

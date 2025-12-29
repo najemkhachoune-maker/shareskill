@@ -1,0 +1,34 @@
+{{- $ns := .Values.namespace | default "default" -}}
+{{- range $svc := .Values.services }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-{{ $svc.name }}
+  namespace: {{ $ns }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ $svc.name }}
+  ports:
+    - port: 80
+      targetPort: {{ $svc.port }}
+      protocol: TCP
+---
+{{- end }}
+
+{{- if .Values.apiGateway.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-{{ .Values.apiGateway.name }}
+  namespace: {{ $ns }}
+spec:
+  type: {{ .Values.apiGateway.serviceType }}
+  selector:
+    app: {{ .Values.apiGateway.name }}
+  ports:
+    - port: 80
+      targetPort: {{ .Values.apiGateway.port }}
+      protocol: TCP
+{{- end }}
+
