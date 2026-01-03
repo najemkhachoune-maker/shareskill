@@ -1,0 +1,48 @@
+# Logs
+*.log
+*_logs.txt
+logs/
+*.out
+
+# Python/Test Scripts & Data
+*.py
+*.sh
+*.json
+
+# Artifacts & Reports
+*_REPORT.md
+*_STATUS.md
+*_CHECKLIST.md
+*_SUCCESS.md
+DEPLOYMENT.md
+
+# Environment Variables
+.env
+.env.production
+!.env.production.template
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# Node
+node_modules/
+dist/
+build/
+coverage/
+
+# Java
+target/
+*.class
+*.jar
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Nested Repos
+devsecops/
+.agent/
