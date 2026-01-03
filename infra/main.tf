@@ -63,7 +63,7 @@ resource "aws_security_group" "challenge_sg" {
 # IAM Role for Nodes
 # -------------------------------
 resource "aws_iam_role" "challenge_node_role" {
-  name = "challenge-node-role"
+  name = "challenge-node-role-new"   # <-- nouveau nom pour éviter conflit
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -100,7 +100,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
 
-  cluster_name    = "challenge-eks"
+  cluster_name    = "challenge-eks-new"   # <-- nouveau nom du cluster
   cluster_version = "1.29"
   vpc_id          = data.aws_vpc.default.id
   subnet_ids      = data.aws_subnets.default.ids
