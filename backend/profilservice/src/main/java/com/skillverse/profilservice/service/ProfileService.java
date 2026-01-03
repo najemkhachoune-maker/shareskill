@@ -25,6 +25,10 @@ public class ProfileService {
         return profileRepository.findById(id).orElse(null);
     }
 
+    public Profile getProfileByEmail(String email) {
+        return profileRepository.findByEmail(email);
+    }
+
     public List<Profile> getAllProfiles() {
         return profileRepository.findAll();
     }
@@ -37,6 +41,10 @@ public class ProfileService {
             profile.setRole(profileDetails.getRole());
             profile.setBio(profileDetails.getBio());
             profile.setPhotoUrl(profileDetails.getPhotoUrl());
+            // Update userId if provided (for linking purposes)
+            if (profileDetails.getUserId() != null) {
+                profile.setUserId(profileDetails.getUserId());
+            }
             return profileRepository.save(profile);
         }
         return null;

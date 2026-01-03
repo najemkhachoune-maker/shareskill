@@ -19,6 +19,11 @@ public class ProfileController {
     private final ProfileService profileService;
     private final SkillService skillService;
 
+    @GetMapping("/health")
+    public String health() {
+        return "Profile Service is up and running";
+    }
+
     // Créer un profil
     @PostMapping
     public Profile createProfile(@RequestBody Profile profile) {
@@ -29,6 +34,12 @@ public class ProfileController {
     @GetMapping("/{id}")
     public Profile getProfile(@PathVariable Long id) {
         return profileService.getProfileById(id);
+    }
+
+    // Récupérer un profil par email
+    @GetMapping("/email/{email}")
+    public Profile getProfileByEmail(@PathVariable String email) {
+        return profileService.getProfileByEmail(email);
     }
 
     // Récupérer tous les profils

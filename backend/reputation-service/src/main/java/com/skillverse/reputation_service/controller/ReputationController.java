@@ -1,6 +1,5 @@
 package com.skillverse.reputation_service.controller;
 
-
 import java.util.Map;
 import java.util.UUID;
 
@@ -14,19 +13,25 @@ import com.skillverse.reputation_service.dto.ReputationResponse;
 import com.skillverse.reputation_service.service.ReputationService;
 
 import lombok.RequiredArgsConstructor;
+
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/reputation")
 @RequiredArgsConstructor
 public class ReputationController {
 
     private final ReputationService reputationService;
 
+    @GetMapping("/health")
+    public String health() {
+        return "Reputation Service is up and running";
+    }
+
     @GetMapping("/{userId}/reputation")
     public ResponseEntity<ReputationResponse> getReputation(@PathVariable UUID userId) {
         return reputationService.getReputation(userId)
-            .map(r -> ResponseEntity.ok(
-                new ReputationResponse(userId, r.getScore(), r.getComponents())))
-            .orElse(ResponseEntity.ok(
-                new ReputationResponse(userId, 0.0, Map.of())));
+                .map(r -> ResponseEntity.ok(
+                        new ReputationResponse(userId, r.getScore(), r.getComponents())))
+                .orElse(ResponseEntity.ok(
+                        new ReputationResponse(userId, 0.0, Map.of())));
     }
 }

@@ -25,16 +25,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KeycloakService {
 
-    @Value("${keycloak.auth-server-url}")
+    @Value("${keycloak.auth-server-url:http://localhost:8180}")
     private String keycloakUrl;
 
-    @Value("${keycloak.realm}")
+    @Value("${keycloak.realm:skillverse}")
     private String realm;
 
-    @Value("${keycloak.resource}")
+    @Value("${keycloak.resource:skillverse-client}")
     private String clientId;
 
-    @Value("${keycloak.credentials.secret}")
+    @Value("${keycloak.credentials.secret:secret}")
     private String clientSecret;
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -43,53 +43,82 @@ public class KeycloakService {
      * Authenticate user with Keycloak and get access token
      */
     public Map<String, Object> authenticateUser(String username, String password) {
-        String tokenUrl = keycloakUrl + "/realms/" + realm + "/protocol/openid-connect/token";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type", "password");
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("username", username);
-        body.add("password", password);
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
-
-        try {
-            ResponseEntity<Map> response = restTemplate.postForEntity(tokenUrl, request, Map.class);
-            return response.getBody();
-        } catch (Exception e) {
-            log.error("Failed to authenticate user with Keycloak: {}", e.getMessage());
-            throw new RuntimeException("Authentication failed");
-        }
+        // Mock authentication for development without Keycloak
+        log.warn("Mocking Keycloak authentication for {}", username);
+        return Map.of(
+                "access_token", "mock_access_token_" + UUID.randomUUID(),
+                "refresh_token", "mock_refresh_token_" + UUID.randomUUID(),
+                "expires_in", 3600,
+                "refresh_expires_in", 86400,
+                "token_type", "Bearer",
+                "not-before-policy", 0,
+                "session_state", UUID.randomUUID().toString(),
+                "scope", "profile email");
+        /*
+         * String tokenUrl = keycloakUrl + "/realms/" + realm +
+         * "/protocol/openid-connect/token";
+         * 
+         * HttpHeaders headers = new HttpHeaders();
+         * headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+         * 
+         * MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+         * body.add("grant_type", "password");
+         * body.add("client_id", clientId);
+         * body.add("client_secret", clientSecret);
+         * body.add("username", username);
+         * body.add("password", password);
+         * 
+         * HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body,
+         * headers);
+         * 
+         * try {
+         * ResponseEntity<Map> response = restTemplate.postForEntity(tokenUrl, request,
+         * Map.class);
+         * return response.getBody();
+         * } catch (Exception e) {
+         * log.error("Failed to authenticate user with Keycloak: {}", e.getMessage());
+         * throw new RuntimeException("Authentication failed");
+         * }
+         */
     }
 
     /**
      * Refresh access token using refresh token
      */
     public Map<String, Object> refreshToken(String refreshToken) {
-        String tokenUrl = keycloakUrl + "/realms/" + realm + "/protocol/openid-connect/token";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type", "refresh_token");
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("refresh_token", refreshToken);
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
-
-        try {
-            ResponseEntity<Map> response = restTemplate.postForEntity(tokenUrl, request, Map.class);
-            return response.getBody();
-        } catch (Exception e) {
-            log.error("Failed to refresh token: {}", e.getMessage());
-            throw new RuntimeException("Token refresh failed");
-        }
+        // Mock refresh
+        log.warn("Mocking Keycloak token refresh");
+        return Map.of(
+                "access_token", "mock_access_token_refreshed_" + UUID.randomUUID(),
+                "refresh_token", "mock_refresh_token_refreshed_" + UUID.randomUUID(),
+                "expires_in", 3600,
+                "refresh_expires_in", 86400,
+                "token_type", "Bearer");
+        /*
+         * String tokenUrl = keycloakUrl + "/realms/" + realm +
+         * "/protocol/openid-connect/token";
+         * 
+         * HttpHeaders headers = new HttpHeaders();
+         * headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+         * 
+         * MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+         * body.add("grant_type", "refresh_token");
+         * body.add("client_id", clientId);
+         * body.add("client_secret", clientSecret);
+         * body.add("refresh_token", refreshToken);
+         * 
+         * HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body,
+         * headers);
+         * 
+         * try {
+         * ResponseEntity<Map> response = restTemplate.postForEntity(tokenUrl, request,
+         * Map.class);
+         * return response.getBody();
+         * } catch (Exception e) {
+         * log.error("Failed to refresh token: {}", e.getMessage());
+         * throw new RuntimeException("Token refresh failed");
+         * }
+         */
     }
 
     /**
@@ -106,23 +135,29 @@ public class KeycloakService {
      * Logout user from Keycloak
      */
     public void logoutUser(String refreshToken) {
-        String logoutUrl = keycloakUrl + "/realms/" + realm + "/protocol/openid-connect/logout";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("refresh_token", refreshToken);
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
-
-        try {
-            restTemplate.postForEntity(logoutUrl, request, String.class);
-            log.info("User logged out from Keycloak");
-        } catch (Exception e) {
-            log.error("Failed to logout user from Keycloak: {}", e.getMessage());
-        }
+        // Mock logout
+        log.warn("Mocking Keycloak logout");
+        /*
+         * String logoutUrl = keycloakUrl + "/realms/" + realm +
+         * "/protocol/openid-connect/logout";
+         * 
+         * HttpHeaders headers = new HttpHeaders();
+         * headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+         * 
+         * MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+         * body.add("client_id", clientId);
+         * body.add("client_secret", clientSecret);
+         * body.add("refresh_token", refreshToken);
+         * 
+         * HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body,
+         * headers);
+         * 
+         * try {
+         * restTemplate.postForEntity(logoutUrl, request, String.class);
+         * log.info("User logged out from Keycloak");
+         * } catch (Exception e) {
+         * log.error("Failed to logout user from Keycloak: {}", e.getMessage());
+         * }
+         */
     }
 }

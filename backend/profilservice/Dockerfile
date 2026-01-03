@@ -1,14 +1,12 @@
-# Utiliser une image JDK complète (non-Alpine) pour éviter les problèmes réseau
-FROM eclipse-temurin:17-jdk
-
-# Répertoire de travail dans le conteneur
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package -DskipTests
 
-# Copier le JAR construit
-COPY target/profilservice-0.0.1-SNAPSHOT.jar app.jar
-
-# Exposer le port du service
-EXPOSE 8081
-
-# Lancer le microservice
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8082
 ENTRYPOINT ["java", "-jar", "app.jar"]

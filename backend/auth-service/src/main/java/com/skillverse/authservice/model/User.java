@@ -33,11 +33,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "keycloak_user_id", unique = true)
+    @Column(name = "keycloak_user_id")
     private String keycloakUserId;
 
     @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(unique = true)
+    private String username;
+
+    @Column(nullable = true)
+    private String password;
 
     @Column(length = 20)
     private String phone;
@@ -54,7 +60,6 @@ public class User {
     @Column(name = "profile_picture_url", columnDefinition = "TEXT")
     private String profilePictureUrl;
 
-    // Flags
     @Column(name = "is_active")
     @Builder.Default
     private Boolean isActive = true;
@@ -71,7 +76,6 @@ public class User {
     @Builder.Default
     private Boolean hasTeacherProfile = false;
 
-    // Gamification
     @Column(name = "learner_level")
     @Builder.Default
     private Integer learnerLevel = 1;
@@ -88,7 +92,6 @@ public class User {
     @Builder.Default
     private Integer totalTokensEarned = 0;
 
-    // Statistics
     @Column(name = "quests_completed")
     @Builder.Default
     private Integer questsCompleted = 0;
@@ -105,7 +108,6 @@ public class User {
     @Builder.Default
     private BigDecimal averageRatingAsTeacher = BigDecimal.ZERO;
 
-    // RGPD
     @Column(name = "gdpr_consent_date")
     private LocalDateTime gdprConsentDate;
 
@@ -116,7 +118,6 @@ public class User {
     @Column(name = "encrypted_personal_data", columnDefinition = "TEXT")
     private String encryptedPersonalData;
 
-    // Timestamps
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -125,215 +126,6 @@ public class User {
 
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
-
-    // Getters and Setters
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getKeycloakUserId() {
-        return keycloakUserId;
-    }
-
-    public void setKeycloakUserId(String keycloakUserId) {
-        this.keycloakUserId = keycloakUserId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public String getProfilePictureUrl() {
-        return profilePictureUrl;
-    }
-
-    public void setProfilePictureUrl(String profilePictureUrl) {
-        this.profilePictureUrl = profilePictureUrl;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public Boolean getIsEmailVerified() {
-        return isEmailVerified;
-    }
-
-    public void setIsEmailVerified(Boolean isEmailVerified) {
-        this.isEmailVerified = isEmailVerified;
-    }
-
-    public Boolean getHasLearnerProfile() {
-        return hasLearnerProfile;
-    }
-
-    public void setHasLearnerProfile(Boolean hasLearnerProfile) {
-        this.hasLearnerProfile = hasLearnerProfile;
-    }
-
-    public Boolean getHasTeacherProfile() {
-        return hasTeacherProfile;
-    }
-
-    public void setHasTeacherProfile(Boolean hasTeacherProfile) {
-        this.hasTeacherProfile = hasTeacherProfile;
-    }
-
-    public Integer getLearnerLevel() {
-        return learnerLevel;
-    }
-
-    public void setLearnerLevel(Integer learnerLevel) {
-        this.learnerLevel = learnerLevel;
-    }
-
-    public Integer getTeacherLevel() {
-        return teacherLevel;
-    }
-
-    public void setTeacherLevel(Integer teacherLevel) {
-        this.teacherLevel = teacherLevel;
-    }
-
-    public Integer getAvailableTokens() {
-        return availableTokens;
-    }
-
-    public void setAvailableTokens(Integer availableTokens) {
-        this.availableTokens = availableTokens;
-    }
-
-    public Integer getTotalTokensEarned() {
-        return totalTokensEarned;
-    }
-
-    public void setTotalTokensEarned(Integer totalTokensEarned) {
-        this.totalTokensEarned = totalTokensEarned;
-    }
-
-    public Integer getQuestsCompleted() {
-        return questsCompleted;
-    }
-
-    public void setQuestsCompleted(Integer questsCompleted) {
-        this.questsCompleted = questsCompleted;
-    }
-
-    public Integer getStudentsTaught() {
-        return studentsTaught;
-    }
-
-    public void setStudentsTaught(Integer studentsTaught) {
-        this.studentsTaught = studentsTaught;
-    }
-
-    public BigDecimal getAverageRatingAsLearner() {
-        return averageRatingAsLearner;
-    }
-
-    public void setAverageRatingAsLearner(BigDecimal averageRatingAsLearner) {
-        this.averageRatingAsLearner = averageRatingAsLearner;
-    }
-
-    public BigDecimal getAverageRatingAsTeacher() {
-        return averageRatingAsTeacher;
-    }
-
-    public void setAverageRatingAsTeacher(BigDecimal averageRatingAsTeacher) {
-        this.averageRatingAsTeacher = averageRatingAsTeacher;
-    }
-
-    public LocalDateTime getGdprConsentDate() {
-        return gdprConsentDate;
-    }
-
-    public void setGdprConsentDate(LocalDateTime gdprConsentDate) {
-        this.gdprConsentDate = gdprConsentDate;
-    }
-
-    public Boolean getDataAnonymized() {
-        return dataAnonymized;
-    }
-
-    public void setDataAnonymized(Boolean dataAnonymized) {
-        this.dataAnonymized = dataAnonymized;
-    }
-
-    public String getEncryptedPersonalData() {
-        return encryptedPersonalData;
-    }
-
-    public void setEncryptedPersonalData(String encryptedPersonalData) {
-        this.encryptedPersonalData = encryptedPersonalData;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getLastLoginAt() {
-        return lastLoginAt;
-    }
-
-    public void setLastLoginAt(LocalDateTime lastLoginAt) {
-        this.lastLoginAt = lastLoginAt;
-    }
 
     @PrePersist
     protected void onCreate() {

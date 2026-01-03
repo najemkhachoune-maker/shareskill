@@ -1,0 +1,53 @@
+global:
+  registry: docker.io/najemkub
+  imagePullSecretName: dockerhub-cred
+  imagePullPolicy: IfNotPresent
+
+namespace: prod
+
+services:
+  - name: frontend
+    image: skillverse-frontend:latest
+    port: 80
+    replicaCount: 2
+  - name: gateway-service
+    image: gateway-service:latest
+    port: 8080
+    replicaCount: 2
+  - name: auth-service
+    image: auth-service:latest
+    port: 8080
+    replicaCount: 2
+  - name: profil-service
+    image: profil-service:latest
+    port: 8080
+    replicaCount: 2
+  - name: chat-service
+    image: chat-service:latest
+    port: 8080
+    replicaCount: 2
+  - name: matching-service
+    image: matching-service:latest
+    port: 8080
+    replicaCount: 2
+  - name: booking-service
+    image: booking-service:latest
+    port: 8080
+    replicaCount: 2
+  - name: reputation-service
+    image: reputation-service:latest
+    port: 8080
+    replicaCount: 2
+  - name: discovery-service
+    image: discovery-service:latest
+    port: 8761
+    replicaCount: 1
+
+ingress:
+  enabled: true
+  className: nginx
+  hostname: skillverse.example.com
+  tls:
+    enabled: true
+    secretName: skillverse-tls
+

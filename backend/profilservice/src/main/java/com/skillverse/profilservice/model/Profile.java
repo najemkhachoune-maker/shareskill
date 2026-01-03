@@ -14,6 +14,7 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String userId; // Link to Auth Service (Keycloak/User UUID)
     private String username;
     private String email;
     private String role; // apprenant, enseignant, mentor
@@ -21,18 +22,10 @@ public class Profile {
     private String photoUrl;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "profile_skills",
-        joinColumns = @JoinColumn(name = "profile_id"),
-        inverseJoinColumns = @JoinColumn(name = "skill_id")
-    )
+    @JoinTable(name = "profile_skills", joinColumns = @JoinColumn(name = "profile_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skill> skills;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "profile_badges",
-        joinColumns = @JoinColumn(name = "profile_id"),
-        inverseJoinColumns = @JoinColumn(name = "badge_id")
-    )
+    @JoinTable(name = "profile_badges", joinColumns = @JoinColumn(name = "profile_id"), inverseJoinColumns = @JoinColumn(name = "badge_id"))
     private List<Badge> badges;
 }

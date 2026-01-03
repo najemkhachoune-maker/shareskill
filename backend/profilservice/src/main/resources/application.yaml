@@ -1,11 +1,13 @@
 server:
-  port: 8081
+  port: 8082
 
 spring:
+  application:
+    name: profil-service
   datasource:
-    url: jdbc:postgresql://host.docker.internal:5432/skillverse_profiles
-    username: postgres
-    password: skill123verse
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:skillverse_profiles}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:skill123verse}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -14,3 +16,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/

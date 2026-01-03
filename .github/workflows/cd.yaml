@@ -3,7 +3,7 @@ name: CD Deploy Infra + Chart
 on:
   workflow_dispatch:
   push:
-    branches: ["develop"]
+    branches: ["develop", "main"]
 
 env:
   REGISTRY: docker.io/najemkub

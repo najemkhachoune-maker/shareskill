@@ -26,12 +26,17 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
+    @GetMapping("/bookings/health")
+    public String health() {
+        return "Booking Service is up and running";
+    }
+
     public record CreateBookingBody(
             @NotNull Long resourceId,
             @NotBlank String customerName,
             @NotNull OffsetDateTime startAt,
-            @NotNull OffsetDateTime endAt
-    ) {}
+            @NotNull OffsetDateTime endAt) {
+    }
 
     public record BookingResponse(
             Long id,
@@ -39,8 +44,7 @@ public class BookingController {
             String customerName,
             OffsetDateTime startAt,
             OffsetDateTime endAt,
-            Object status
-    ) {
+            Object status) {
         public static BookingResponse from(Booking b) {
             return new BookingResponse(
                     b.getId(),
@@ -48,8 +52,7 @@ public class BookingController {
                     b.getCustomerName(),
                     b.getStartAt(),
                     b.getEndAt(),
-                    b.getStatus()
-            );
+                    b.getStatus());
         }
     }
 
@@ -57,8 +60,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.CREATED)
     public CreateBookingResponse createBooking(@Valid @RequestBody CreateBookingBody body) {
         return bookingService.createBooking(new CreateBookingRequest(
-                body.resourceId(), body.customerName(), body.startAt(), body.endAt()
-        ));
+                body.resourceId(), body.customerName(), body.startAt(), body.endAt()));
     }
 
     @GetMapping("/bookings/{id}")
@@ -71,8 +73,7 @@ public class BookingController {
     public AvailabilityResponse availability(
             @PathVariable Long resourceId,
             @RequestParam OffsetDateTime from,
-            @RequestParam OffsetDateTime to
-    ) {
+            @RequestParam OffsetDateTime to) {
         return bookingService.getAvailability(resourceId, from, to);
     }
 

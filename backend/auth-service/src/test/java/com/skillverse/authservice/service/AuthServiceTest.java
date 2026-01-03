@@ -66,11 +66,11 @@ class AuthServiceTest {
 
         // Act
         User registeredUser = authService.register(
-            "test@example.com",
-            "password123",
-            "John",
-            "Doe"
-        );
+                "test@example.com",
+                "testuser",
+                "password123",
+                "John",
+                "Doe");
 
         // Assert
         assertNotNull(registeredUser);
@@ -83,7 +83,7 @@ class AuthServiceTest {
     void login_ShouldAuthenticateUserSuccessfully() {
         // Arrange
         when(keycloakService.authenticateUser("test@example.com", "password123"))
-            .thenReturn(mockTokens);
+                .thenReturn(mockTokens);
         when(userService.getUserByEmail("test@example.com")).thenReturn(testUser);
         when(sessionRepository.save(any(UserSession.class))).thenReturn(new UserSession());
 
@@ -132,7 +132,7 @@ class AuthServiceTest {
                 .build();
 
         when(sessionRepository.findByTokenAndIsActiveTrue(validToken))
-            .thenReturn(Optional.of(session));
+                .thenReturn(Optional.of(session));
 
         // Act
         boolean isValid = authService.validateToken(validToken);
@@ -147,7 +147,7 @@ class AuthServiceTest {
         // Arrange
         String invalidToken = "invalid-token";
         when(sessionRepository.findByTokenAndIsActiveTrue(invalidToken))
-            .thenReturn(Optional.empty());
+                .thenReturn(Optional.empty());
 
         // Act
         boolean isValid = authService.validateToken(invalidToken);

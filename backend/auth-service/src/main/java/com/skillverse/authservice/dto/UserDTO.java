@@ -20,6 +20,7 @@ import lombok.Setter;
 public class UserDTO {
     private UUID id;
     private String email;
+    private String username;
     private String phone;
     private String firstName;
     private String lastName;

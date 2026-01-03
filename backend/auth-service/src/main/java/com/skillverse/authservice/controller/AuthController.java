@@ -22,30 +22,43 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @GetMapping("/health")
+    public String health() {
+        return "Auth Service is up and running";
+    }
+
     @PostMapping("/register")
     @Operation(summary = "Register new user")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody RegisterRequest request) {
-        User user = authService.register(
-            request.getEmail(),
-            request.getPassword(),
-            request.getFirstName(),
-            request.getLastName()
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDTO(user));
+        System.out.println("Received registration request for email: " + request.getEmail());
+        try {
+            User user = authService.register(
+                    request.getEmail(),
+                    request.getUsername(),
+                    request.getPassword(),
+                    request.getFirstName(),
+                    request.getLastName());
+            System.out.println("User registered successfully: " + user.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDTO(user));
+        } catch (Exception e) {
+            System.err.println("Error during registration: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @PostMapping("/login")
     @Operation(summary = "Login user")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
         Map<String, Object> result = authService.login(request.getEmail(), request.getPassword());
-        
+
         AuthResponse response = AuthResponse.builder()
                 .accessToken((String) result.get("accessToken"))
                 .refreshToken((String) result.get("refreshToken"))
                 .expiresIn(((Number) result.get("expiresIn")).longValue())
                 .userId((java.util.UUID) result.get("userId"))
                 .build();
-        
+
         return ResponseEntity.ok(response);
     }
 
@@ -54,13 +67,13 @@ public class AuthController {
     public ResponseEntity<AuthResponse> refresh(@RequestBody Map<String, String> request) {
         String refreshToken = request.get("refreshToken");
         Map<String, Object> result = authService.refresh(refreshToken);
-        
+
         AuthResponse response = AuthResponse.builder()
                 .accessToken((String) result.get("accessToken"))
                 .refreshToken((String) result.get("refreshToken"))
                 .expiresIn(((Number) result.get("expiresIn")).longValue())
                 .build();
-        
+
         return ResponseEntity.ok(response);
     }
 

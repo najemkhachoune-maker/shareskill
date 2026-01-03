@@ -1,0 +1,351 @@
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------< [0;36mcom.example:notification-service[0;1m >------------------[m
+[[1;34mINFO[m] [1mBuilding notification-service 0.0.1-SNAPSHOT[m
+[[1;34mINFO[m]   from pom.xml
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mclean:3.4.0:clean[m [1m(default-clean)[m @ [36mnotification-service[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/kali/skillversePlateform/backend/notification-service/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mjacoco:0.8.11:prepare-agent[m [1m(prepare-agent-ut)[m @ [36mnotification-service[0;1m ---[m
+[[1;34mINFO[m] jacocoArgLine set to -javaagent:/home/kali/.m2/repository/org/jacoco/org.jacoco.agent/0.8.11/org.jacoco.agent-0.8.11-runtime.jar=destfile=/home/kali/skillversePlateform/backend/notification-service/target/jacoco-ut.exec
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mresources:3.3.1:resources[m [1m(default-resources)[m @ [36mnotification-service[0;1m ---[m
+[[1;34mINFO[m] Copying 1 resource from src/main/resources to target/classes
+[[1;34mINFO[m] Copying 0 resource from src/main/resources to target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mcompiler:3.13.0:compile[m [1m(default-compile)[m @ [36mnotification-service[0;1m ---[m
+[[1;34mINFO[m] Recompiling the module because of [1mchanged source code[m.
+[[1;34mINFO[m] Compiling 9 source files with javac [debug parameters release 17] to target/classes
+[[1;34mINFO[m] Annotation processing is enabled because one or more processors were found
+  on the class path. A future release of javac may disable annotation processing
+  unless at least one processor is specified by name (-processor), or a search
+  path is specified (--processor-path, --processor-module-path), or annotation
+  processing is enabled explicitly (-proc:only, -proc:full).
+  Use -Xlint:-options to suppress this message.
+  Use -proc:none to disable annotation processing.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mresources:3.3.1:testResources[m [1m(default-testResources)[m @ [36mnotification-service[0;1m ---[m
+[[1;34mINFO[m] skip non existing resourceDirectory /home/kali/skillversePlateform/backend/notification-service/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mcompiler:3.13.0:testCompile[m [1m(default-testCompile)[m @ [36mnotification-service[0;1m ---[m
+[[1;34mINFO[m] Recompiling the module because of [1mchanged dependency[m.
+[[1;34mINFO[m] Compiling 4 source files with javac [debug parameters release 17] to target/test-classes
+[[1;34mINFO[m] Annotation processing is enabled because one or more processors were found
+  on the class path. A future release of javac may disable annotation processing
+  unless at least one processor is specified by name (-processor), or a search
+  path is specified (--processor-path, --processor-module-path), or annotation
+  processing is enabled explicitly (-proc:only, -proc:full).
+  Use -Xlint:-options to suppress this message.
+  Use -proc:none to disable annotation processing.
+[[1;34mINFO[m] -------------------------------------------------------------
+[[1;33mWARNING[m] COMPILATION WARNING : 
+[[1;34mINFO[m] -------------------------------------------------------------
+[[1;33mWARNING[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[51,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[[1;33mWARNING[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[51,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[[1;33mWARNING[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[51,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[[1;33mWARNING[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[51,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[[1;33mWARNING[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[51,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[[1;33mWARNING[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[54,6] org.springframework.boot.test.mock.mockito.SpyBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[[1;33mWARNING[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[54,6] org.springframework.boot.test.mock.mockito.SpyBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[[1;33mWARNING[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[54,6] org.springframework.boot.test.mock.mockito.SpyBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[[1;33mWARNING[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[54,6] org.springframework.boot.test.mock.mockito.SpyBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[[1;33mWARNING[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[54,6] org.springframework.boot.test.mock.mockito.SpyBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[[1;34mINFO[m] 10 warnings 
+[[1;34mINFO[m] -------------------------------------------------------------
+[[1;34mINFO[m] -------------------------------------------------------------
+[[1;31mERROR[m] COMPILATION ERROR : 
+[[1;34mINFO[m] -------------------------------------------------------------
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[69,20] cannot find symbol
+  symbol:   method setToken(java.lang.String)
+  location: variable history of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[70,20] cannot find symbol
+  symbol:   method setTitle(java.lang.String)
+  location: variable history of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[71,20] cannot find symbol
+  symbol:   method setBody(java.lang.String)
+  location: variable history of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[72,20] cannot find symbol
+  symbol:   method setDateSent(java.time.LocalDateTime)
+  location: variable history of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[73,20] cannot find symbol
+  symbol:   method setStatus(java.lang.String)
+  location: variable history of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[77,34] cannot find symbol
+  symbol:   method sendNotification(java.lang.String,java.lang.String,java.lang.String)
+  location: class com.skillverse.notificationservice.service.NotificationPush
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[83,16] cannot find symbol
+  symbol:   method setTo(java.lang.String)
+  location: variable request of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[86,16] cannot find symbol
+  symbol:   method setFrom(java.lang.String)
+  location: variable request of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[101,16] cannot find symbol
+  symbol:   method setBody(java.lang.String)
+  location: variable request of type com.skillverse.notificationservice.dto.PushNotificationRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[110,36] cannot find symbol
+  symbol:   method getToken()
+  location: class com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[111,36] cannot find symbol
+  symbol:   method getTitle()
+  location: class com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[118,17] cannot find symbol
+  symbol:   method setToken(java.lang.String)
+  location: variable history1 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[119,17] cannot find symbol
+  symbol:   method setTitle(java.lang.String)
+  location: variable history1 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[120,17] cannot find symbol
+  symbol:   method setBody(java.lang.String)
+  location: variable history1 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[121,17] cannot find symbol
+  symbol:   method setStatus(java.lang.String)
+  location: variable history1 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[122,17] cannot find symbol
+  symbol:   method setDateSent(java.time.LocalDateTime)
+  location: variable history1 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[126,17] cannot find symbol
+  symbol:   method setToken(java.lang.String)
+  location: variable history2 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[127,17] cannot find symbol
+  symbol:   method setTitle(java.lang.String)
+  location: variable history2 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[128,17] cannot find symbol
+  symbol:   method setBody(java.lang.String)
+  location: variable history2 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[129,17] cannot find symbol
+  symbol:   method setStatus(java.lang.String)
+  location: variable history2 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[130,17] cannot find symbol
+  symbol:   method setDateSent(java.time.LocalDateTime)
+  location: variable history2 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[37,12] cannot find symbol
+  symbol:   method setFrom(java.lang.String)
+  location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[38,12] cannot find symbol
+  symbol:   method setTo(java.lang.String)
+  location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[57,12] cannot find symbol
+  symbol:   method setFrom(<nulltype>)
+  location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[58,12] cannot find symbol
+  symbol:   method setTo(java.lang.String)
+  location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[74,12] cannot find symbol
+  symbol:   method setFrom(java.lang.String)
+  location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[75,12] cannot find symbol
+  symbol:   method setTo(java.lang.String)
+  location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[32,10] cannot find symbol
+  symbol:   method setToken(java.lang.String)
+  location: variable h of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[33,10] cannot find symbol
+  symbol:   method setTitle(java.lang.String)
+  location: variable h of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[34,10] cannot find symbol
+  symbol:   method setBody(java.lang.String)
+  location: variable h of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[35,10] cannot find symbol
+  symbol:   method setDateSent(java.time.LocalDateTime)
+  location: variable h of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[36,10] cannot find symbol
+  symbol:   method setStatus(java.lang.String)
+  location: variable h of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[67,42] cannot find symbol
+  symbol:   method findById(long)
+  location: variable service of type com.skillverse.notificationservice.service.NotificationHistoryService
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[78,42] cannot find symbol
+  symbol:   method findById(long)
+  location: variable service of type com.skillverse.notificationservice.service.NotificationHistoryService
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[56,25] cannot find symbol
+  symbol:   method sendNotification(java.lang.String,java.lang.String,java.lang.String)
+  location: variable notificationPush of type com.skillverse.notificationservice.service.NotificationPush
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[68,35] cannot find symbol
+  symbol:   method getStatus()
+  location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[69,34] cannot find symbol
+  symbol:   method getToken()
+  location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[70,34] cannot find symbol
+  symbol:   method getTitle()
+  location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[71,33] cannot find symbol
+  symbol:   method getBody()
+  location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[72,28] cannot find symbol
+  symbol:   method getDateSent()
+  location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[87,25] cannot find symbol
+  symbol:   method sendNotification(java.lang.String,java.lang.String,java.lang.String)
+  location: variable notificationPush of type com.skillverse.notificationservice.service.NotificationPush
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[99,37] cannot find symbol
+  symbol:   method getStatus()
+  location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[100,34] cannot find symbol
+  symbol:   method getToken()
+  location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[101,34] cannot find symbol
+  symbol:   method getTitle()
+  location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[102,33] cannot find symbol
+  symbol:   method getBody()
+  location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[103,28] cannot find symbol
+  symbol:   method getDateSent()
+  location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;34mINFO[m] 46 errors 
+[[1;34mINFO[m] -------------------------------------------------------------
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;31mBUILD FAILURE[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  6.221 s
+[[1;34mINFO[m] Finished at: 2025-12-29T16:34:45+01:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;31mERROR[m] Failed to execute goal [32morg.apache.maven.plugins:maven-compiler-plugin:3.13.0:testCompile[m [1m(default-testCompile)[m on project [36mnotification-service[m: [1;31mCompilation failure[m: Compilation failure: 
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[69,20] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setToken(java.lang.String)
+[[1;31mERROR[m]   location: variable history of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[70,20] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setTitle(java.lang.String)
+[[1;31mERROR[m]   location: variable history of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[71,20] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setBody(java.lang.String)
+[[1;31mERROR[m]   location: variable history of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[72,20] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setDateSent(java.time.LocalDateTime)
+[[1;31mERROR[m]   location: variable history of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[73,20] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setStatus(java.lang.String)
+[[1;31mERROR[m]   location: variable history of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[77,34] cannot find symbol
+[[1;31mERROR[m]   symbol:   method sendNotification(java.lang.String,java.lang.String,java.lang.String)
+[[1;31mERROR[m]   location: class com.skillverse.notificationservice.service.NotificationPush
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[83,16] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setTo(java.lang.String)
+[[1;31mERROR[m]   location: variable request of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[86,16] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setFrom(java.lang.String)
+[[1;31mERROR[m]   location: variable request of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[101,16] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setBody(java.lang.String)
+[[1;31mERROR[m]   location: variable request of type com.skillverse.notificationservice.dto.PushNotificationRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[110,36] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getToken()
+[[1;31mERROR[m]   location: class com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[111,36] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getTitle()
+[[1;31mERROR[m]   location: class com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[118,17] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setToken(java.lang.String)
+[[1;31mERROR[m]   location: variable history1 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[119,17] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setTitle(java.lang.String)
+[[1;31mERROR[m]   location: variable history1 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[120,17] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setBody(java.lang.String)
+[[1;31mERROR[m]   location: variable history1 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[121,17] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setStatus(java.lang.String)
+[[1;31mERROR[m]   location: variable history1 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[122,17] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setDateSent(java.time.LocalDateTime)
+[[1;31mERROR[m]   location: variable history1 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[126,17] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setToken(java.lang.String)
+[[1;31mERROR[m]   location: variable history2 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[127,17] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setTitle(java.lang.String)
+[[1;31mERROR[m]   location: variable history2 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[128,17] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setBody(java.lang.String)
+[[1;31mERROR[m]   location: variable history2 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[129,17] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setStatus(java.lang.String)
+[[1;31mERROR[m]   location: variable history2 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/integration/IntegrationFullIT.java:[130,17] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setDateSent(java.time.LocalDateTime)
+[[1;31mERROR[m]   location: variable history2 of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[37,12] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setFrom(java.lang.String)
+[[1;31mERROR[m]   location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[38,12] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setTo(java.lang.String)
+[[1;31mERROR[m]   location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[57,12] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setFrom(<nulltype>)
+[[1;31mERROR[m]   location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[58,12] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setTo(java.lang.String)
+[[1;31mERROR[m]   location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[74,12] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setFrom(java.lang.String)
+[[1;31mERROR[m]   location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/EmailServiceTest.java:[75,12] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setTo(java.lang.String)
+[[1;31mERROR[m]   location: variable req of type com.skillverse.notificationservice.dto.EmailRequest
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[32,10] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setToken(java.lang.String)
+[[1;31mERROR[m]   location: variable h of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[33,10] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setTitle(java.lang.String)
+[[1;31mERROR[m]   location: variable h of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[34,10] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setBody(java.lang.String)
+[[1;31mERROR[m]   location: variable h of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[35,10] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setDateSent(java.time.LocalDateTime)
+[[1;31mERROR[m]   location: variable h of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[36,10] cannot find symbol
+[[1;31mERROR[m]   symbol:   method setStatus(java.lang.String)
+[[1;31mERROR[m]   location: variable h of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[67,42] cannot find symbol
+[[1;31mERROR[m]   symbol:   method findById(long)
+[[1;31mERROR[m]   location: variable service of type com.skillverse.notificationservice.service.NotificationHistoryService
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationHistoryServiceTest.java:[78,42] cannot find symbol
+[[1;31mERROR[m]   symbol:   method findById(long)
+[[1;31mERROR[m]   location: variable service of type com.skillverse.notificationservice.service.NotificationHistoryService
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[56,25] cannot find symbol
+[[1;31mERROR[m]   symbol:   method sendNotification(java.lang.String,java.lang.String,java.lang.String)
+[[1;31mERROR[m]   location: variable notificationPush of type com.skillverse.notificationservice.service.NotificationPush
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[68,35] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getStatus()
+[[1;31mERROR[m]   location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[69,34] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getToken()
+[[1;31mERROR[m]   location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[70,34] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getTitle()
+[[1;31mERROR[m]   location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[71,33] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getBody()
+[[1;31mERROR[m]   location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[72,28] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getDateSent()
+[[1;31mERROR[m]   location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[87,25] cannot find symbol
+[[1;31mERROR[m]   symbol:   method sendNotification(java.lang.String,java.lang.String,java.lang.String)
+[[1;31mERROR[m]   location: variable notificationPush of type com.skillverse.notificationservice.service.NotificationPush
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[99,37] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getStatus()
+[[1;31mERROR[m]   location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[100,34] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getToken()
+[[1;31mERROR[m]   location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[101,34] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getTitle()
+[[1;31mERROR[m]   location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[102,33] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getBody()
+[[1;31mERROR[m]   location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] /home/kali/skillversePlateform/backend/notification-service/src/test/java/com/skillverse/notificationservice/service/NotificationPushTest.java:[103,28] cannot find symbol
+[[1;31mERROR[m]   symbol:   method getDateSent()
+[[1;31mERROR[m]   location: variable saved of type com.skillverse.notificationservice.entity.NotificationHistory
+[[1;31mERROR[m] -> [1m[Help 1][m
+[[1;31mERROR[m] 
+[[1;31mERROR[m] To see the full stack trace of the errors, re-run Maven with the [1m-e[m switch.
+[[1;31mERROR[m] Re-run Maven using the [1m-X[m switch to enable full debug logging.
+[[1;31mERROR[m] 
+[[1;31mERROR[m] For more information about the errors and possible solutions, please read the following articles:
+[[1;31mERROR[m] [1m[Help 1][m http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

@@ -1,0 +1,263 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: skillverse-postgres
+    environment:
+      POSTGRES_DB: skillverse
+      POSTGRES_USER: ${POSTGRES_USER:-skillverse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_production}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - skillverse-network
+    # healthcheck:
+    #   test: [ "CMD-SHELL", "pg_isready -U skillverse" ]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+
+    # Redis for Rate Limiting & Caching
+  redis:
+    image: redis:7-alpine
+    container_name: skillverse-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - skillverse-network
+    # healthcheck:
+    #   test: [ "CMD", "redis-cli", "ping" ]
+    #   interval: 10s
+    #   timeout: 3s
+    #   retries: 5
+
+    # Discovery Service (Eureka)
+  discovery-service:
+    build:
+      context: ./backend/discovery-service
+      dockerfile: Dockerfile
+    image: najemkub/discovery-service:latest
+    container_name: discovery-service
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_TOOL_OPTIONS: "-Xmx512m" # Increased for stability
+    ports:
+      - "8761:8761"
+    networks:
+      - skillverse-network
+    # healthcheck:
+    #   test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
+    # Gateway Service
+  gateway-service:
+    build:
+      context: ./backend/gateway-service
+      dockerfile: Dockerfile
+    image: najemkub/gateway-service:latest
+    container_name: gateway-service
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_TOOL_OPTIONS: "-Xmx512m" # Increased for stability
+      EUREKA_HOST: discovery-service
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://yourdomain.com}
+    ports:
+      - "8080:8080"
+    depends_on:
+      discovery-service:
+        condition: service_started
+    networks:
+      - skillverse-network
+    # healthcheck:
+    #   test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
+    # Auth Service
+  auth-service:
+    build:
+      context: ./backend/auth-service
+      dockerfile: Dockerfile
+    image: najemkub/auth-service:latest
+    container_name: auth-service
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_TOOL_OPTIONS: "-Xmx512m" # Increased for stability
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skillverse?currentSchema=auth
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-skillverse}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_production}
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-key-change-in-production}
+      EUREKA_HOST: discovery-service
+    depends_on:
+      postgres:
+        condition: service_started
+      discovery-service:
+        condition: service_started
+    networks:
+      - skillverse-network
+
+  # Profile Service
+  profil-service:
+    build:
+      context: ./backend/profilservice
+      dockerfile: Dockerfile
+    image: najemkub/profil-service:latest
+    container_name: profil-service
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_TOOL_OPTIONS: "-Xmx512m" # Increased for stability
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skillverse?currentSchema=profile
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-skillverse}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_production}
+      EUREKA_HOST: discovery-service
+    depends_on:
+      postgres:
+        condition: service_started
+      discovery-service:
+        condition: service_started
+    networks:
+      - skillverse-network
+
+  # Chat Service
+  chat-service:
+    build:
+      context: ./backend/chat-service
+      dockerfile: Dockerfile
+    image: najemkub/chat-service:latest
+    container_name: chat-service
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_TOOL_OPTIONS: "-Xmx512m" # Increased for stability
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skillverse?currentSchema=chat
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-skillverse}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_production}
+      EUREKA_HOST: discovery-service
+    depends_on:
+      postgres:
+        condition: service_started
+      discovery-service:
+        condition: service_started
+    networks:
+      - skillverse-network
+
+  # Booking Service
+  booking-service:
+    build:
+      context: ./backend/booking-service
+      dockerfile: Dockerfile
+    image: najemkub/booking-service:latest
+    container_name: booking-service
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_TOOL_OPTIONS: "-Xmx512m" # Increased for stability
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skillverse?currentSchema=booking
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-skillverse}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_production}
+      EUREKA_HOST: discovery-service
+    depends_on:
+      postgres:
+        condition: service_started
+      discovery-service:
+        condition: service_started
+    networks:
+      - skillverse-network
+
+  # Reputation Service
+  reputation-service:
+    build:
+      context: ./backend/reputation-service
+      dockerfile: Dockerfile
+    image: najemkub/reputation-service:latest
+    container_name: reputation-service
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_TOOL_OPTIONS: "-Xmx512m" # Increased for stability
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skillverse?currentSchema=reputation
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-skillverse}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_production}
+      EUREKA_HOST: discovery-service
+    depends_on:
+      postgres:
+        condition: service_started
+      discovery-service:
+        condition: service_started
+    networks:
+      - skillverse-network
+
+  # Matching Service
+  matching-service:
+    build:
+      context: ./backend/matching-service
+      dockerfile: Dockerfile
+    image: najemkub/matching-service:latest
+    container_name: matching-service
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JAVA_TOOL_OPTIONS: "-Xmx512m" # Increased for stability
+      EUREKA_HOST: discovery-service
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skillverse?currentSchema=matching
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-skillverse}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_production}
+    depends_on:
+      discovery-service:
+        condition: service_started
+    networks:
+      - skillverse-network
+
+  # Notification Service (Disabled for now)
+  # notification-service:
+  #   build:
+  #     context: ./backend/notification-service
+  #     dockerfile: Dockerfile
+  #   container_name: notification-service
+  #   environment:
+  #     SPRING_PROFILES_ACTIVE: prod
+  #     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skillverse?currentSchema=notification
+  #     SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-skillverse}
+  #     SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_production}
+  #     EUREKA_HOST: discovery-service
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     discovery-service:
+  #       condition: service_healthy
+  #   networks:
+  #     - skillverse-network
+
+  # Frontend (Production Build)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: "" # Empty for relative paths via Nginx
+    image: najemkub/skillverse-frontend:latest
+    container_name: skillverse-frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    # depends_on:
+    #   - gateway-service
+    networks:
+      - skillverse-network
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro # SSL certificates
+      - ./nginx/nginx.prod.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  skillverse-network:
+    driver: bridge

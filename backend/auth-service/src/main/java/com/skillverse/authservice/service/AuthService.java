@@ -24,25 +24,31 @@ public class AuthService {
     private final UserService userService;
     private final UserSessionRepository sessionRepository;
     private final EventPublisher eventPublisher;
+    private final com.skillverse.authservice.util.JwtUtil jwtUtil;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     /**
      * Register new user
      */
-    public User register(String email, String password, String firstName, String lastName) {
-        // Register in Keycloak first
-        String keycloakUserId = keycloakService.registerUser(email, password, firstName, lastName);
-        
+    public User register(String email, String username, String password, String firstName, String lastName) {
+        // Check if user exists
+        if (userService.existsByEmail(email)) {
+            throw new RuntimeException("User already exists");
+        }
+
         // Create user in our database
         User user = User.builder()
-                .keycloakUserId(keycloakUserId)
+                // .keycloakUserId(UUID.randomUUID().toString())
                 .email(email)
+                .username(username)
+                .password(passwordEncoder.encode(password))
                 .firstName(firstName)
                 .lastName(lastName)
                 .isActive(true)
-                .isEmailVerified(false)
+                .isEmailVerified(false) // TODO: Email verification
                 .gdprConsentDate(LocalDateTime.now())
                 .build();
-        
+
         return userService.createUser(user);
     }
 
@@ -50,41 +56,48 @@ public class AuthService {
      * Login user and create session
      */
     public Map<String, Object> login(String email, String password) {
-        // Authenticate with Keycloak
-        Map<String, Object> tokens = keycloakService.authenticateUser(email, password);
-        
         // Get user from database
         User user = userService.getUserByEmail(email);
-        
+
+        if (user.getPassword() == null || !passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        // Generate tokens
+        Map<String, Object> claims = new java.util.HashMap<>();
+        claims.put("roles", java.util.List.of("ROLE_USER"));
+        claims.put("userId", user.getId().toString());
+
+        String accessToken = jwtUtil.generateToken(email, claims, 86400000); // 24h
+        String refreshToken = jwtUtil.generateToken(email, claims, 604800000); // 7 days
+
         // Create session
         UserSession session = UserSession.builder()
                 .user(user)
-                .token((String) tokens.get("access_token"))
-                .refreshToken((String) tokens.get("refresh_token"))
+                .token(accessToken)
+                .refreshToken(refreshToken)
                 .isActive(true)
                 .expiresAt(LocalDateTime.now().plusDays(1))
                 .build();
         sessionRepository.save(session);
-        
+
         // Update last login
         userService.updateLastLogin(user.getId());
-        
+
         // Publish event
         eventPublisher.publishUserEvent(
-            EventType.USER_LOGIN, 
-            user.getId(), 
-            user.getEmail(), 
-            Map.of("loginTime", LocalDateTime.now())
-        );
-        
+                EventType.USER_LOGIN,
+                user.getId(),
+                user.getEmail(),
+                Map.of("loginTime", LocalDateTime.now()));
+
         log.info("User logged in: {}", email);
-        
+
         return Map.of(
-            "accessToken", tokens.get("access_token"),
-            "refreshToken", tokens.get("refresh_token"),
-            "expiresIn", tokens.get("expires_in"),
-            "userId", user.getId()
-        );
+                "accessToken", accessToken,
+                "refreshToken", refreshToken,
+                "expiresIn", 86400,
+                "userId", user.getId());
     }
 
     /**
@@ -94,21 +107,33 @@ public class AuthService {
         // Validate session
         UserSession session = sessionRepository.findByRefreshTokenAndIsActiveTrue(refreshToken)
                 .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
-        
-        // Get new tokens from Keycloak
-        Map<String, Object> newTokens = keycloakService.refreshToken(refreshToken);
-        
+
+        // Validate token signature
+        if (jwtUtil.isTokenExpired(refreshToken)) {
+            throw new RuntimeException("Refresh token expired");
+        }
+
+        String email = jwtUtil.extractUsername(refreshToken);
+        User user = userService.getUserByEmail(email);
+
+        // Generate new tokens
+        Map<String, Object> claims = new java.util.HashMap<>();
+        claims.put("roles", java.util.List.of("ROLE_USER"));
+        claims.put("userId", user.getId().toString());
+
+        String newAccessToken = jwtUtil.generateToken(email, claims, 86400000);
+        String newRefreshToken = jwtUtil.generateToken(email, claims, 604800000); // Rotate refresh token
+
         // Update session
-        session.setToken((String) newTokens.get("access_token"));
-        session.setRefreshToken((String) newTokens.get("refresh_token"));
+        session.setToken(newAccessToken);
+        session.setRefreshToken(newRefreshToken);
         session.setExpiresAt(LocalDateTime.now().plusDays(1));
         sessionRepository.save(session);
-        
+
         return Map.of(
-            "accessToken", newTokens.get("access_token"),
-            "refreshToken", newTokens.get("refresh_token"),
-            "expiresIn", newTokens.get("expires_in")
-        );
+                "accessToken", newAccessToken,
+                "refreshToken", newRefreshToken,
+                "expiresIn", 86400);
     }
 
     /**
@@ -117,22 +142,20 @@ public class AuthService {
     public void logout(String token) {
         UserSession session = sessionRepository.findByTokenAndIsActiveTrue(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
-        
+
         // Invalidate session
         session.setIsActive(false);
         sessionRepository.save(session);
-        
-        // Logout from Keycloak
-        keycloakService.logoutUser(session.getRefreshToken());
-        
+
+        // No Keycloak logout needed
+
         // Publish event
         eventPublisher.publishUserEvent(
-            EventType.USER_LOGOUT, 
-            session.getUser().getId(), 
-            session.getUser().getEmail(), 
-            Map.of("logoutTime", LocalDateTime.now())
-        );
-        
+                EventType.USER_LOGOUT,
+                session.getUser().getId(),
+                session.getUser().getEmail(),
+                Map.of("logoutTime", LocalDateTime.now()));
+
         log.info("User logged out: {}", session.getUser().getEmail());
     }
 
@@ -140,6 +163,10 @@ public class AuthService {
      * Validate token for other microservices
      */
     public boolean validateToken(String token) {
-        return sessionRepository.findByTokenAndIsActiveTrue(token).isPresent();
+        try {
+            return !jwtUtil.isTokenExpired(token) && sessionRepository.findByTokenAndIsActiveTrue(token).isPresent();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

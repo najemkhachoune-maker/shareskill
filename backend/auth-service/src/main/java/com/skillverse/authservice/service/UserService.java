@@ -32,21 +32,24 @@ public class UserService {
     public User createUser(User user) {
         // Les timestamps sont gérés automatiquement par @PrePersist dans User.java
         User savedUser = userRepository.save(user);
-        
+
         // Publish event
         Map<String, Object> payload = new HashMap<>();
         payload.put("firstName", savedUser.getFirstName());
         payload.put("lastName", savedUser.getLastName());
         payload.put("learnerLevel", savedUser.getLearnerLevel());
         payload.put("teacherLevel", savedUser.getTeacherLevel());
-        
-        eventPublisher.publishUserEvent(
-            EventType.USER_CREATED, 
-            savedUser.getId(), 
-            savedUser.getEmail(), 
-            payload
-        );
-        
+
+        try {
+            eventPublisher.publishUserEvent(
+                    EventType.USER_CREATED,
+                    savedUser.getId(),
+                    savedUser.getEmail(),
+                    payload);
+        } catch (Exception e) {
+            log.error("Failed to publish USER_CREATED event for user: {}", savedUser.getEmail(), e);
+        }
+
         log.info("Created user: {}", savedUser.getEmail());
         return savedUser;
     }
@@ -68,6 +71,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
     }
 
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
     /**
      * Get user by Keycloak ID
      */
@@ -82,7 +89,7 @@ public class UserService {
     @CacheEvict(value = "users", key = "#user.id")
     public User updateUser(User user) {
         User existingUser = getUserById(user.getId());
-        
+
         // Update fields
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
@@ -90,21 +97,20 @@ public class UserService {
         existingUser.setPhone(user.getPhone());
         existingUser.setProfilePictureUrl(user.getProfilePictureUrl());
         // updatedAt est géré automatiquement par @PreUpdate
-        
+
         User updatedUser = userRepository.save(existingUser);
-        
+
         // Publish event
         Map<String, Object> payload = new HashMap<>();
         payload.put("firstName", updatedUser.getFirstName());
         payload.put("lastName", updatedUser.getLastName());
-        
+
         eventPublisher.publishUserEvent(
-            EventType.USER_UPDATED, 
-            updatedUser.getId(), 
-            updatedUser.getEmail(), 
-            payload
-        );
-        
+                EventType.USER_UPDATED,
+                updatedUser.getId(),
+                updatedUser.getEmail(),
+                payload);
+
         log.info("Updated user: {}", updatedUser.getEmail());
         return updatedUser;
     }
@@ -125,7 +131,7 @@ public class UserService {
     @CacheEvict(value = "users", key = "#userId")
     public void deleteUser(UUID userId) {
         User user = getUserById(userId);
-        
+
         // Anonymize instead of deleting (GDPR)
         user.setDataAnonymized(true);
         user.setEmail("anonymized_" + userId + "@deleted.com");
@@ -135,17 +141,16 @@ public class UserService {
         user.setPhone(null);
         user.setProfilePictureUrl(null);
         user.setIsActive(false);
-        
+
         userRepository.save(user);
-        
+
         // Publish event
         eventPublisher.publishUserEvent(
-            EventType.USER_DELETED, 
-            userId, 
-            user.getEmail(), 
-            Map.of("anonymized", true)
-        );
-        
+                EventType.USER_DELETED,
+                userId,
+                user.getEmail(),
+                Map.of("anonymized", true));
+
         log.info("Anonymized user: {}", userId);
     }
 

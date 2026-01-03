@@ -1,26 +1,12 @@
-# ----------- Build Stage ------------
-FROM maven:3.9.9-eclipse-temurin-17-alpine AS build
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
-
-# Copier pom.xml et télécharger les dépendances (optimisation du cache)
 COPY pom.xml .
-RUN mvn -B dependency:go-offline
-
-# Copier le code source
+RUN mvn dependency:go-offline
 COPY src ./src
+RUN mvn package -DskipTests
 
-# Build l'application (skip tests pour CI/CD)
-RUN mvn -B clean package -DskipTests
-
-# ----------- Runtime Stage (DISTROLESS) ------------
-FROM gcr.io/distroless/java17:latest
+FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-
-# Copier le JAR généré
 COPY --from=build /app/target/*.jar app.jar
-
-EXPOSE 8080
-
-# Exécuter l'application
-CMD ["java","-jar","app.jar"]
-
+EXPOSE 8084
+ENTRYPOINT ["java", "-jar", "app.jar"]

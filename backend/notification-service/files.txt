@@ -1,0 +1,6 @@
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/example/notification_service/controller/NotificationHistoryController.java
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/test/java/com/example/notification_service/integration/IntegrationFullIT.java
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/test/java/com/example/notification_service/NotificationServiceApplicationTest.java
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/test/java/com/example/notification_service/service/EmailServiceTest.java
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/test/java/com/example/notification_service/service/NotificationHistoryServiceTest.java
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/test/java/com/example/notification_service/service/NotificationPushTest.java

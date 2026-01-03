@@ -20,6 +20,7 @@ public class UserMapper {
         return UserDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
+                .username(user.getUsername())
                 .phone(user.getPhone())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())

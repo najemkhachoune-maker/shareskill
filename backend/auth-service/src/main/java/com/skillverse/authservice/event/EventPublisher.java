@@ -1,6 +1,5 @@
 package com.skillverse.authservice.event;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -10,11 +9,11 @@ import java.util.Map;
 import java.util.UUID;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class EventPublisher {
 
-    private final KafkaTemplate<String, UserEvent> kafkaTemplate;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private KafkaTemplate<String, UserEvent> kafkaTemplate;
 
     public void publishUserEvent(EventType eventType, UUID userId, String email, Map<String, Object> payload) {
         UserEvent event = UserEvent.builder()
@@ -28,8 +27,15 @@ public class EventPublisher {
                 .build();
 
         String topic = getTopicForEventType(eventType);
-        kafkaTemplate.send(topic, userId.toString(), event);
-        log.info("Published event {} to topic {} for user {}", eventType, topic, userId);
+        try {
+            // Commented out to avoid blocking when Kafka is down
+            // kafkaTemplate.send(topic, userId.toString(), event);
+            log.info("Kafka is disabled - would have published event {} to topic {}", eventType, topic);
+        } catch (Exception e) {
+            log.error("Failed to publish event to Kafka (Kafka might be down): {}", e.getMessage());
+            // We don't rethrow because we want the business logic to continue (e.g.
+            // registration successful in DB)
+        }
     }
 
     private String getTopicForEventType(EventType eventType) {

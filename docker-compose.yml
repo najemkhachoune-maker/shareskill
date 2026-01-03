@@ -1,0 +1,188 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: skillverse-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - skillverse-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: skillverse-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - skillverse-network
+
+  discovery-service:
+    build: ./backend/discovery-service
+    container_name: discovery-service
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    networks:
+      - skillverse-network
+
+  gateway-service:
+    build: ./backend/gateway-service
+    container_name: gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_HOST=discovery-service
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    networks:
+      - skillverse-network
+
+  auth-service:
+    build: ./backend/auth-service
+    container_name: auth-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+      - REDIS_HOST=redis
+      - EUREKA_HOST=discovery-service
+      - JWT_SECRET=my_ultra_secure_and_long_jwt_secret_key_32_chars
+    depends_on:
+      postgres:
+        condition: service_healthy
+      discovery-service:
+        condition: service_healthy
+    networks:
+      - skillverse-network
+    restart: on-failure
+
+  profil-service:
+    build: ./backend/profilservice
+    container_name: profil-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - EUREKA_HOST=discovery-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      discovery-service:
+        condition: service_healthy
+    networks:
+      - skillverse-network
+    restart: on-failure
+
+  booking-service:
+    build: ./backend/booking-service
+    container_name: booking-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=booking
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - DB_DRIVER=org.postgresql.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+      - EUREKA_HOST=discovery-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      discovery-service:
+        condition: service_healthy
+    networks:
+      - skillverse-network
+    restart: on-failure
+
+  chat-service:
+    build: ./backend/chat-service
+    container_name: chat-service
+    environment:
+      - EUREKA_HOST=discovery-service
+      - DB_URL=jdbc:postgresql://postgres:5432/postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_DRIVER=org.postgresql.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+      - JWT_SECRET=my_ultra_secure_and_long_jwt_secret_key_32_chars
+    depends_on:
+      postgres:
+        condition: service_healthy
+      discovery-service:
+        condition: service_healthy
+    networks:
+      - skillverse-network
+    restart: on-failure
+
+  reputation-service:
+    build: ./backend/reputation-service
+    container_name: reputation-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=reputation
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - EUREKA_HOST=discovery-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      discovery-service:
+        condition: service_healthy
+    networks:
+      - skillverse-network
+    restart: on-failure
+
+  matching-service:
+    build: ./backend/matching-service
+    container_name: matching-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - EUREKA_HOST=discovery-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      discovery-service:
+        condition: service_healthy
+    networks:
+      - skillverse-network
+    restart: on-failure
+
+  frontend:
+    build: ./frontend
+    container_name: skillverse-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - gateway-service
+    networks:
+      - skillverse-network
+
+networks:
+  skillverse-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

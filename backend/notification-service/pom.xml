@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.6</version>
+    <version>3.4.1</version>
     <relativePath/>
   </parent>
 
@@ -29,6 +29,7 @@
     <protobuf.version>3.25.5</protobuf.version>
     <grpc.version>1.75.0</grpc.version>
     <commons-lang3.version>3.18.0</commons-lang3.version>
+    <spring-cloud.version>2024.0.0</spring-cloud.version>
   </properties>
 
   <!-- Dépendances -->
@@ -87,11 +88,29 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- Eureka Client -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <!-- Lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
+    </dependency>
   </dependencies>
 
   <!-- Verrouillage des versions transitives -->
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
@@ -138,10 +157,6 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-    <!-- Empêche la génération du JAR automatiquement lors du cycle verify/package -->
-            <skip>true</skip>
-         </configuration>
       </plugin>
 
       <!-- 1) Tests unitaires -->

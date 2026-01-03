@@ -1,0 +1,13 @@
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse/notificationservice
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse/notificationservice/controller
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse/notificationservice/controller/NotificationHistoryController.java
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse/notificationservice/entity
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse/notificationservice/entity/NotificationHistory.java
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse/notificationservice/NotificationServiceApplication.java
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse/notificationservice/repository
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse/notificationservice/repository/NotificationHistoryRepository.java
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse/notificationservice/service
+/mnt/c/Users/HP/Downloads/CN_boukhncha/skillversePlateform/backend/notification-service/src/main/java/com/skillverse/notificationservice/service/NotificationHistoryService.java

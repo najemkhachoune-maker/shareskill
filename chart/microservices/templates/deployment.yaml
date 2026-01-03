@@ -1,0 +1,36 @@
+{{- $ns := .Values.namespace | default "default" -}}
+{{- range $svc := .Values.services }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Release.Name }}-{{ $svc.name }}
+  namespace: {{ $ns }}
+spec:
+  replicas: {{ $svc.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ $svc.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $svc.name }}
+      annotations:
+        cosign.sigstore.dev/signature: "required"
+    spec:
+      imagePullSecrets:
+        - name: {{ $.Values.global.imagePullSecretName }}
+      containers:
+        - name: {{ $svc.name }}
+          image: {{ $.Values.global.registry }}/{{ $svc.image }}
+          imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
+          ports:
+            - containerPort: {{ $svc.port }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+{{- end }}
+

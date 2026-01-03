@@ -44,12 +44,13 @@ class AuthControllerTest {
     @Test
     void register_ShouldReturnCreatedUser() throws Exception {
         // Arrange
-        RegisterRequest request = new RegisterRequest(
-            "test@example.com",
-            "password123",
-            "John",
-            "Doe"
-        );
+        RegisterRequest request = RegisterRequest.builder()
+                .email("test@example.com")
+                .username("testuser")
+                .password("password123")
+                .firstName("John")
+                .lastName("Doe")
+                .build();
 
         User mockUser = User.builder()
                 .id(UUID.randomUUID())
@@ -58,7 +59,7 @@ class AuthControllerTest {
                 .lastName("Doe")
                 .build();
 
-        when(authService.register(any(), any(), any(), any())).thenReturn(mockUser);
+        when(authService.register(any(), any(), any(), any(), any())).thenReturn(mockUser);
 
         // Act & Assert
         mockMvc.perform(post("/api/auth/register")
