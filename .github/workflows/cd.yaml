@@ -43,9 +43,6 @@ jobs:
     steps:
       - name: Checkout infra
         uses: actions/checkout@v4
-        with:
-          path: infra
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
@@ -107,3 +104,4 @@ jobs:
           for d in profilservice noutificationservices authentification chat-app matchingservices exchangeservice api-gateway; do
             kubectl rollout status deploy/microservices-$d -n $NAMESPACE --timeout=180s || exit 1
           done
+
