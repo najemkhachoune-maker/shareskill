@@ -72,7 +72,7 @@ jobs:
 
       - name: Helm Upgrade / Install
         run: |
-          helm upgrade --install skillverse chart \microservices
+          helm upgrade --install skillverse ./chart/microservices \
             --namespace $NAMESPACE \
             --create-namespace \
             -f chart/values.yaml \
@@ -88,4 +88,5 @@ jobs:
             echo "⏳ Waiting for $d"
             kubectl rollout status deployment/$d -n $NAMESPACE --timeout=180s
           done
+
 
