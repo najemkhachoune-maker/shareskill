@@ -1,59 +1,75 @@
-helm-deploy:
-  needs: [checkov, gitleaks]
-  runs-on: [self-hosted, linux, x64]
-  steps:
-    - uses: actions/checkout@v4
+name: CD Deploy Infra + Chart
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+      - main
 
-    - name: Update kubeconfig (EKS)
-      run: |
-        aws eks update-kubeconfig \
-          --name $EKS_CLUSTER_NAME \
-          --region ${{ secrets.AWS_REGION }}
+env:
+  REGISTRY: docker.io/najemkub
+  NAMESPACE: default
+  IMAGE_PULL_SECRET_NAME: dockerhub-cred
+  EKS_CLUSTER_NAME: chat-app-eks
 
-    - name: Ensure namespace exists
-      run: |
-        kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+jobs:
+  helm-deploy:
+    needs: [checkov, gitleaks]
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Create / Update imagePullSecret
-      run: |
-        kubectl delete secret $IMAGE_PULL_SECRET_NAME -n $NAMESPACE --ignore-not-found
-        kubectl create secret docker-registry $IMAGE_PULL_SECRET_NAME \
-          --docker-username="${{ secrets.DOCKER_USERNAME }}" \
-          --docker-password="${{ secrets.DOCKER_PASSWORD }}" \
-          --docker-server="https://index.docker.io/v1/" \
-          -n $NAMESPACE
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Helm Lint
-      run: |
-        helm lint chart/microservices
+      - name: Update kubeconfig (EKS)
+        run: |
+          aws eks update-kubeconfig \
+            --name $EKS_CLUSTER_NAME \
+            --region ${{ secrets.AWS_REGION }}
 
-    - name: Helm Upgrade / Install
-      run: |
-        helm upgrade --install skillverse ./chart/microservices \
-          --namespace $NAMESPACE \
-          -f chart/microservices/values.yaml \
-          --set ingress.hostname=placeholder.local \
-          --set ingress.tls.secretName=tls-secret
+      - name: Ensure namespace exists
+        run: |
+          kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
 
-    - name: Wait for Rollout
-      run: |
-        set -e
-        for d in skillverse-frontend skillverse-gateway-service skillverse-auth-service \
-                 skillverse-profil-service skillverse-chat-service skillverse-matching-service \
-                 skillverse-booking-service skillverse-reputation-service skillverse-discovery-service; do
-          echo "⏳ Waiting for $d"
-          if ! kubectl rollout status deployment/$d -n $NAMESPACE --timeout=180s; then
-            echo "❌ Rollout failed for $d"
-            kubectl get pods -n $NAMESPACE
-            kubectl describe deployment $d -n $NAMESPACE
-            kubectl logs deployment/$d -n $NAMESPACE --all-containers
-            exit 1
-          fi
-        done
+      - name: Create / Update imagePullSecret
+        run: |
+          kubectl delete secret $IMAGE_PULL_SECRET_NAME -n $NAMESPACE --ignore-not-found
+          kubectl create secret docker-registry $IMAGE_PULL_SECRET_NAME \
+            --docker-username="${{ secrets.DOCKER_USERNAME }}" \
+            --docker-password="${{ secrets.DOCKER_PASSWORD }}" \
+            --docker-server="https://index.docker.io/v1/" \
+            -n $NAMESPACE
+
+      - name: Helm Lint
+        run: |
+          helm lint chart/microservices
+
+      - name: Helm Upgrade / Install
+        run: |
+          helm upgrade --install skillverse ./chart/microservices \
+            --namespace $NAMESPACE \
+            -f chart/microservices/values.yaml \
+            --set ingress.hostname=placeholder.local \
+            --set ingress.tls.secretName=tls-secret
+
+      - name: Wait for Rollout
+        run: |
+          set -e
+          for d in skillverse-frontend skillverse-gateway-service skillverse-auth-service \
+                   skillverse-profil-service skillverse-chat-service skillverse-matching-service \
+                   skillverse-booking-service skillverse-reputation-service skillverse-discovery-service; do
+            echo "⏳ Waiting for $d"
+            if ! kubectl rollout status deployment/$d -n $NAMESPACE --timeout=180s; then
+              echo "❌ Rollout failed for $d"
+              kubectl get pods -n $NAMESPACE
+              kubectl describe deployment $d -n $NAMESPACE
+              kubectl logs deployment/$d -n $NAMESPACE --all-containers
+              exit 1
+            fi
+          done
