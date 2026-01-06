@@ -14,23 +14,38 @@ spec:
     metadata:
       labels:
         app: {{ $svc.name }}
-      annotations:
-        cosign.sigstore.dev/signature: "required"
     spec:
+      {{- if $.Values.global.imagePullSecretName }}
       imagePullSecrets:
         - name: {{ $.Values.global.imagePullSecretName }}
+      {{- end }}
+      {{- if $svc.dependsOn }}
+      initContainers:
+        - name: wait-for-dependencies
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              {{- range $dep := $svc.dependsOn }}
+              until nslookup {{ $dep }}; do echo "Waiting for {{ $dep }}"; sleep 2; done;
+              {{- end }}
+      {{- end }}
       containers:
         - name: {{ $svc.name }}
           image: {{ $.Values.global.registry }}/{{ $svc.image }}
           imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
           ports:
             - containerPort: {{ $svc.port }}
+          {{- if $svc.env }}
+          env:
+          {{- range $key, $val := $svc.env }}
+            - name: {{ $key }}
+              value: {{ $val }}
+          {{- end }}
+          {{- end }}
           securityContext:
             runAsNonRoot: false
             allowPrivilegeEscalation: true
-            capabilities:
-              drop: ["ALL"]
 ---
 {{- end }}
-
-
