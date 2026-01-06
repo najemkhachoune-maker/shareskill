@@ -18,8 +18,7 @@ jobs:
     runs-on: [self-hosted, linux, x64]
     continue-on-error: true
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Run Checkov (Terraform)
         uses: bridgecrewio/checkov-action@v12
@@ -32,8 +31,7 @@ jobs:
     runs-on: [self-hosted, linux, x64]
     continue-on-error: true
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
@@ -44,10 +42,8 @@ jobs:
     needs: [checkov, gitleaks]
     runs-on: [self-hosted, linux, x64]
     steps:
-      - name: Checkout chart
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # ⚠️ AWS CLI doit déjà être installé sur le runner
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -61,6 +57,10 @@ jobs:
             --name $EKS_CLUSTER_NAME \
             --region ${{ secrets.AWS_REGION }}
 
+      - name: Ensure namespace exists
+        run: |
+          kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Create / Update imagePullSecret
         run: |
           kubectl delete secret $IMAGE_PULL_SECRET_NAME -n $NAMESPACE --ignore-not-found
@@ -70,12 +70,16 @@ jobs:
             --docker-server="https://index.docker.io/v1/" \
             -n $NAMESPACE
 
+      - name: Helm Lint
+        run: |
+          helm lint chart/microservices
+
       - name: Helm Upgrade / Install
         run: |
           helm upgrade --install skillverse ./chart/microservices \
             --namespace $NAMESPACE \
             --create-namespace \
-            -f chart/values.yaml \
+            -f chart/microservices/values.yaml \
             --set ingress.hostname=${{ secrets.INGRESS_HOST }} \
             --set ingress.tls.secretName=${{ secrets.TLS_SECRET_NAME }}
 
@@ -88,5 +92,3 @@ jobs:
             echo "⏳ Waiting for $d"
             kubectl rollout status deployment/$d -n $NAMESPACE --timeout=180s
           done
-
-
