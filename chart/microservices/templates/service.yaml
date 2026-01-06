@@ -6,15 +6,16 @@ metadata:
   name: {{ $.Release.Name }}-{{ $svc.name }}
   namespace: {{ $ns }}
 spec:
-  type: ClusterIP
   selector:
     app: {{ $svc.name }}
   ports:
-    - port: 80
+    - protocol: TCP
+      port: {{ $svc.port }}
       targetPort: {{ $svc.port }}
-      protocol: TCP
+  type: ClusterIP
 ---
 {{- end }}
+
 
 
 
