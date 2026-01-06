@@ -75,7 +75,6 @@ jobs:
         run: |
           helm upgrade --install skillverse ./chart/microservices \
             --namespace $NAMESPACE \
-            --create-namespace \
             -f chart/microservices/values.yaml \
             --set ingress.hostname=${{ secrets.INGRESS_HOST }} \
             --set ingress.tls.secretName=${{ secrets.TLS_SECRET_NAME }}
@@ -89,5 +88,6 @@ jobs:
             echo "⏳ Waiting for $d"
             kubectl rollout status deployment/$d -n $NAMESPACE --timeout=180s
           done
+
 
 
