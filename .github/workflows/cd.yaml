@@ -57,10 +57,7 @@ jobs:
             --name $EKS_CLUSTER_NAME \
             --region ${{ secrets.AWS_REGION }}
 
-      - name: Ensure namespace exists
-        run: |
-          kubectl apply -f - 
-
+  
       - name: Create / Update imagePullSecret
         run: |
           kubectl delete secret $IMAGE_PULL_SECRET_NAME -n $NAMESPACE --ignore-not-found
@@ -92,4 +89,5 @@ jobs:
             echo "⏳ Waiting for $d"
             kubectl rollout status deployment/$d -n $NAMESPACE --timeout=180s
           done
+
 
