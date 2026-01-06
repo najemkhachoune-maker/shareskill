@@ -26,11 +26,11 @@ spec:
           ports:
             - containerPort: {{ $svc.port }}
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            allowPrivilegeEscalation: false
+            runAsNonRoot: false
+            allowPrivilegeEscalation: true
             capabilities:
               drop: ["ALL"]
 ---
 {{- end }}
+
 
