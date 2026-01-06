@@ -3,7 +3,7 @@ global:
   imagePullSecretName: dockerhub-cred
   imagePullPolicy: IfNotPresent
 
-namespace: prod
+namespace: default
 
 services:
   - name: frontend
@@ -50,4 +50,5 @@ ingress:
   tls:
     enabled: true
     secretName: skillverse-tls
+
 
