@@ -11,16 +11,17 @@ env:
   REGISTRY: docker.io/najemkub
   NAMESPACE: default
   IMAGE_PULL_SECRET_NAME: dockerhub-cred
+  EKS_CLUSTER_NAME: chat-app-eks
 
 jobs:
   checkov:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     continue-on-error: true
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run Checkov scan
+      - name: Run Checkov (Terraform)
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: infra
@@ -28,24 +29,25 @@ jobs:
           quiet: true
 
   gitleaks:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     continue-on-error: true
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run Gitleaks scan
+      - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
         with:
           args: detect --source . --no-git --redact --exit-code 0
 
   helm-deploy:
     needs: [checkov, gitleaks]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     steps:
       - name: Checkout chart
         uses: actions/checkout@v4
 
+      # ⚠️ AWS CLI doit déjà être installé sur le runner
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -53,21 +55,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: v1.29.0
-
-      - name: Install Helm
-        uses: azure/setup-helm@v4
-
-      - name: Update kubeconfig
+      - name: Update kubeconfig (EKS)
         run: |
           aws eks update-kubeconfig \
-            --name chat-app-eks \
+            --name $EKS_CLUSTER_NAME \
             --region ${{ secrets.AWS_REGION }}
 
-      - name: Create/Update imagePullSecret
+      - name: Create / Update imagePullSecret
         run: |
           kubectl delete secret $IMAGE_PULL_SECRET_NAME -n $NAMESPACE --ignore-not-found
           kubectl create secret docker-registry $IMAGE_PULL_SECRET_NAME \
@@ -76,7 +70,7 @@ jobs:
             --docker-server="https://index.docker.io/v1/" \
             -n $NAMESPACE
 
-      - name: Helm upgrade
+      - name: Helm Upgrade / Install
         run: |
           helm upgrade --install skillverse chart \
             --namespace $NAMESPACE \
@@ -85,8 +79,12 @@ jobs:
             --set ingress.hostname=${{ secrets.INGRESS_HOST }} \
             --set ingress.tls.secretName=${{ secrets.TLS_SECRET_NAME }}
 
-      - name: Wait for rollout
+      - name: Wait for Rollout
         run: |
-          for d in frontend gateway-service auth-service profil-service chat-service matching-service booking-service reputation-service discovery-service; do
-            kubectl rollout status deployment/$d -n $NAMESPACE --timeout=180s || exit 1
+          set -e
+          for d in frontend gateway-service auth-service profil-service \
+                   chat-service matching-service booking-service \
+                   reputation-service discovery-service; do
+            echo "⏳ Waiting for $d"
+            kubectl rollout status deployment/$d -n $NAMESPACE --timeout=180s
           done
