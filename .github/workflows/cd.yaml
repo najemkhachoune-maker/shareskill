@@ -78,4 +78,3 @@ jobs:
         run: |
           echo "🎉 All services are up and running"
           echo "Pipeline completed successfully"
-
