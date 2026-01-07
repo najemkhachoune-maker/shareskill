@@ -5,11 +5,6 @@ on:
   push:
     branches: ["develop", "main"]
 
-env:
-  REGISTRY: docker.io/********
-  NAMESPACE: default
-  IMAGE_PULL_SECRET_NAME: ********
-
 jobs:
   checkov:
     runs-on: ubuntu-latest
@@ -83,3 +78,4 @@ jobs:
         run: |
           echo "🎉 All services are up and running"
           echo "Pipeline completed successfully"
+
