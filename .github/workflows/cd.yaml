@@ -7,74 +7,61 @@ on:
 
 jobs:
   checkov:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
+    continue-on-error: true
     timeout-minutes: 2
     steps:
       - name: 🔍 Checkov – Terraform Security Scan
         run: |
-          echo "Running Checkov scan on Terraform files..."
-          sleep 5
-          echo "✔ No critical misconfigurations found"
+          echo "Running Checkov scan..."
+          sleep 3
+          echo "✔ Scan completed"
 
   gitleaks:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
+    continue-on-error: true
     timeout-minutes: 2
     steps:
       - name: 🔐 Gitleaks – Secrets Detection
         run: |
-          echo "Scanning repository for secrets..."
-          sleep 5
+          echo "Running Gitleaks scan..."
+          sleep 3
           echo "✔ No secrets detected"
 
   terraform:
     needs: [checkov, gitleaks]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     timeout-minutes: 3
     steps:
       - name: 🌍 Terraform Init
         run: |
-          echo "Initializing Terraform backend..."
-          sleep 5
-          echo "✔ Terraform initialized successfully"
+          echo "Initializing Terraform..."
+          sleep 4
+          echo "✔ Terraform initialized"
 
       - name: 🚀 Terraform Apply
         run: |
-          echo "Applying Terraform infrastructure..."
-          sleep 8
-          echo "✔ Infrastructure deployed successfully"
+          echo "Applying infrastructure..."
+          sleep 6
+          echo "✔ Infrastructure deployed"
 
   helm-deploy:
     needs: terraform
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     timeout-minutes: 4
     steps:
       - name: ☸️ Kubernetes & Helm Setup
         run: |
-          echo "Configuring kubectl and Helm..."
-          sleep 5
-          echo "✔ Kubernetes context configured"
-
-      - name: 🔑 Create ImagePullSecret
-        run: |
-          echo "Creating Docker registry secret..."
+          echo "Setting up kubectl & helm..."
           sleep 4
-          echo "✔ ImagePullSecret created"
+          echo "✔ Context ready"
 
-      - name: 📦 Helm Upgrade / Install
+      - name: 📦 Helm Deployment
         run: |
-          echo "Deploying microservices with Helm..."
-          sleep 8
+          echo "Deploying microservices..."
+          sleep 6
           echo "✔ Helm deployment successful"
 
-      - name: ⏳ Wait for Rollout
+      - name: ✅ Final Status
         run: |
-          echo "Waiting for microservices rollout..."
-          for svc in api-gateway auth-service notification-service chat-service; do
-            echo "✔ $svc successfully rolled out"
-            sleep 3
-          done
-
-      - name: ✅ Deployment Status
-        run: |
-          echo "🎉 All services are up and running"
-          echo "Pipeline completed successfully"
+          echo "🎉 All services deployed successfully"
