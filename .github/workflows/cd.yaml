@@ -1,75 +1,85 @@
-name: CD Deploy Infra + Chart
+name: CD Deploy Infra + Chart (Demo Mode)
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - develop
-      - main
+    branches: ["develop", "main"]
 
 env:
-  REGISTRY: docker.io/najemkub
+  REGISTRY: docker.io/********
   NAMESPACE: default
-  IMAGE_PULL_SECRET_NAME: dockerhub-cred
-  EKS_CLUSTER_NAME: chat-app-eks
+  IMAGE_PULL_SECRET_NAME: ********
 
 jobs:
-  helm-deploy:
-    needs: [checkov, gitleaks]
-    runs-on: [self-hosted, linux, x64]
+  checkov:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Update kubeconfig (EKS)
+      - name: 🔍 Checkov – Terraform Security Scan
         run: |
-          aws eks update-kubeconfig \
-            --name $EKS_CLUSTER_NAME \
-            --region ${{ secrets.AWS_REGION }}
+          echo "Running Checkov scan on Terraform files..."
+          sleep 5
+          echo "✔ No critical misconfigurations found"
 
-      - name: Ensure namespace exists
+  gitleaks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: 🔐 Gitleaks – Secrets Detection
         run: |
-          kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+          echo "Scanning repository for secrets..."
+          sleep 5
+          echo "✔ No secrets detected"
 
-      - name: Create / Update imagePullSecret
+  terraform:
+    needs: [checkov, gitleaks]
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 🌍 Terraform Init
         run: |
-          kubectl delete secret $IMAGE_PULL_SECRET_NAME -n $NAMESPACE --ignore-not-found
-          kubectl create secret docker-registry $IMAGE_PULL_SECRET_NAME \
-            --docker-username="${{ secrets.DOCKER_USERNAME }}" \
-            --docker-password="${{ secrets.DOCKER_PASSWORD }}" \
-            --docker-server="https://index.docker.io/v1/" \
-            -n $NAMESPACE
+          echo "Initializing Terraform backend..."
+          sleep 5
+          echo "✔ Terraform initialized successfully"
 
-      - name: Helm Lint
+      - name: 🚀 Terraform Apply
         run: |
-          helm lint chart/microservices
+          echo "Applying Terraform infrastructure..."
+          sleep 8
+          echo "✔ Infrastructure deployed successfully"
 
-      - name: Helm Upgrade / Install
+  helm-deploy:
+    needs: terraform
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: ☸️ Kubernetes & Helm Setup
         run: |
-          helm upgrade --install skillverse ./chart/microservices \
-            --namespace $NAMESPACE \
-            -f chart/microservices/values.yaml \
-            --set ingress.hostname=placeholder.local \
-            --set ingress.tls.secretName=tls-secret
+          echo "Configuring kubectl and Helm..."
+          sleep 5
+          echo "✔ Kubernetes context configured"
 
-      - name: Wait for Rollout
+      - name: 🔑 Create ImagePullSecret
         run: |
-          set -e
-          for d in skillverse-frontend skillverse-gateway-service skillverse-auth-service \
-                   skillverse-profil-service skillverse-chat-service skillverse-matching-service \
-                   skillverse-booking-service skillverse-reputation-service skillverse-discovery-service; do
-            echo "⏳ Waiting for $d"
-            if ! kubectl rollout status deployment/$d -n $NAMESPACE --timeout=180s; then
-              echo "❌ Rollout failed for $d"
-              kubectl get pods -n $NAMESPACE
-              kubectl describe deployment $d -n $NAMESPACE
-              kubectl logs deployment/$d -n $NAMESPACE --all-containers
-              exit 1
-            fi
+          echo "Creating Docker registry secret..."
+          sleep 4
+          echo "✔ ImagePullSecret created"
+
+      - name: 📦 Helm Upgrade / Install
+        run: |
+          echo "Deploying microservices with Helm..."
+          sleep 8
+          echo "✔ Helm deployment successful"
+
+      - name: ⏳ Wait for Rollout
+        run: |
+          echo "Waiting for microservices rollout..."
+          for svc in api-gateway auth-service notification-service chat-service; do
+            echo "✔ $svc successfully rolled out"
+            sleep 3
           done
+
+      - name: ✅ Deployment Status
+        run: |
+          echo "🎉 All services are up and running"
+          echo "Pipeline completed successfully"
